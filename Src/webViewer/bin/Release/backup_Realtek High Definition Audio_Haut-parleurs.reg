@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Render\{8389c31f-711d-49ef-9d67-1b9607cb57f7}\FxProperties]
+"{d04e05a6-594b-4fb6-a80d-01af5eed7d1d},5"="{DA2C9ECE-7418-4906-B4FA-0A00B3EB88AA}"
+"{d04e05a6-594b-4fb6-a80d-01af5eed7d1d},6"="{A296D363-EE83-4af9-9BE7-729C1296150A}"
+"{d04e05a6-594b-4fb6-a80d-01af5eed7d1d},7"="{A29EB043-6CE2-4ee2-B38C-F58719E0D88F}"
+

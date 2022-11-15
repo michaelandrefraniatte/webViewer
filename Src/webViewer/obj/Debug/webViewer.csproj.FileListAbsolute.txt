@@ -1,0 +1,21 @@
+C:\Users\michael\Documents\Visual Studio 2012\Projects\webViewer\webViewer\bin\Debug\webViewer.exe.config
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\webViewer.exe
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\webViewer.pdb
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\CSCore.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.Base.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.WinForm.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebEngine.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\CSCore.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.Base.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.WinForm.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebEngine.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.csprojAssemblyReference.cache
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.Form1.resources
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.Properties.Resources.resources
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.csproj.GenerateResource.cache
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.csproj.CoreCompileInputs.cache
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.csproj.CopyComplete
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.exe
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\Debug\webViewer.pdb

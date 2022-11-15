@@ -1,0 +1,26 @@
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\bin\Debug\webViewer.exe
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\bin\Debug\webViewer.pdb
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\obj\x86\Debug\webViewer.csprojResolveAssemblyReference.cache
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\obj\x86\Debug\webViewer.Form1.resources
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\obj\x86\Debug\webViewer.Properties.Resources.resources
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\obj\x86\Debug\webViewer.csproj.GenerateResource.Cache
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\obj\x86\Debug\webViewer.exe
+C:\Users\michael\Documents\Visual Studio 2010\Projects\webViewer\webViewer\obj\x86\Debug\webViewer.pdb
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\webViewer.exe
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\webViewer.pdb
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.Base.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.WinForm.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebEngine.dll
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.Base.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebBrowser.WinForm.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\bin\Debug\EO.WebEngine.xml
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.csprojAssemblyReference.cache
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.Form1.resources
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.Properties.Resources.resources
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.csproj.GenerateResource.cache
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.csproj.CoreCompileInputs.cache
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.csproj.CopyComplete
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.exe
+C:\Users\mic\Documents\GitHub\webViewer\Src\nugget\webViewer\webViewer\obj\x86\Debug\webViewer.pdb

@@ -1,0 +1,540 @@
+<head>
+    <meta charset="fr_FR.UTF-8">
+	<style>
+		#dialogoverlay {
+			display: none;
+			opacity: .8;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			background: #FFF;
+			width: 100%;
+			z-index: 10;
+		}
+
+		#dialogbox {
+			display: none;
+			position: fixed;
+			background: #000;
+			border-radius: 7px;
+			width: 550px;
+			z-index: 10;
+		}
+
+			#dialogbox > div {
+				background: #FFF;
+				margin: 8px;
+			}
+
+				#dialogbox > div > #dialogboxhead {
+					background: #666;
+					font-size: 19px;
+					padding: 10px;
+					color: #CCC;
+				}
+
+				#dialogbox > div > #dialogboxbody {
+					background: #333;
+					padding: 20px;
+					color: #FFF;
+				}
+
+				#dialogbox > div > #dialogboxfoot {
+					background: #666;
+					padding: 10px;
+					text-align: right;
+				}
+				#dialogboxbody input {
+					width: 485px;
+				}
+	</style>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            width: 100%;
+            overflow-x: hidden;
+	    margin-bottom: 60px;
+        }
+        p, h1 {
+            margin: 10px 15px 0px 0px;
+	    text-align: justify;
+            padding: 0px 10px 0px 10px;
+        }
+        a {
+            white-space: nowrap;
+            color: white;
+            margin: 10px;
+        }
+        #page div {
+            margin-left: 10px;
+	    display:inline-block;
+        }
+        #page div div {
+	    cursor: pointer;
+        }
+        #page p {
+	    cursor: pointer;
+        }
+        #page div div.switchediting {
+	    display: none;
+	    cursor: pointer;
+        }
+        #page p.switchediting {
+	    display: none;
+	    cursor: pointer;
+        }
+	#wait {
+	    	display: none;
+    		position:fixed;
+    		padding:0;
+    		margin:0;
+    		top:0;
+    		left:0;
+    		width: 100%;
+    		height: 100%;
+    		background:rgba(0,0,0,0.9);
+	}
+	#wait h1 {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		position: absolute;
+	}
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #444;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #eee;
+    }
+    </style>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px Arial;  
+}
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #000; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #444; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #666; 
+}
+</style>
+</head>
+<body>
+<div id="wait" style="display: none;">
+    <h1>Wait...</h1>
+</div>
+	<div id="dialogoverlay"></div>
+	<div id="dialogbox">
+		<div>
+			<div id="dialogboxhead"></div>
+			<div id="dialogboxbody"></div>
+			<div id="dialogboxfoot"></div>
+		</div>
+	</div>
+
+    <div class="autocomplete" style="width:300px;">
+        <input id="search" type="text" placeholder="search">
+    </div>
+    <input type="submit" onclick="search();" value="Search">
+    <input type="submit" onclick="save();" value="Save" style="float:right;margin-right:15px;">
+    <input type="submit" onclick="edit();" value="Edit" style="float:right;margin-right:15px;">
+    <div id="page">
+	<p></p><p onclick="addTitle(this)" class="switchediting" style="display: none;">+</p><p></p>
+	<div>
+		<p></p><h1>Rock</h1><p></p>
+        	<p>
+            		</p><div><button onclick="playSong(&quot;&quot;)"><b>Stop</b></button><div onclick="add(this)" class="switchediting" style="display: none;">+</div></div>
+            		<div><button onclick="playSong(&quot;Phoenix1.mp3&quot;)"><b>Enemy Inside Phoenix 1</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            		<div><button onclick="playSong(&quot;Extinction.mp3&quot;)"><b>Killstation Extinction</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            		<div><button onclick="playSong(&quot;Sleepwalkers.mp3&quot;)"><b>DRACONIAN Sleepwalkers</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+        	<p></p>
+		<div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+	</div><br>
+    </div>
+    <script>
+	var elementtoadd = '';
+	var songname = '';
+	var filename = '';
+	function getPromptSongName(val) {
+		songname = val;
+  		if (songname == null | songname == "") {
+    			return;
+  		} 
+		setTimeout(promptFunc, 1000);
+	}
+	function promptFunc() {
+		Prompt.render('Please enter a file name:','getPromptFileName');
+	}
+	function getPromptFileName(val) {
+		filename = val;
+  		if (filename == null | filename == "") {
+    			return;
+  		} 
+		setTimeout(addFinalFunc, 1000);
+	}
+	function addFinalFunc() {
+		addFinal();
+	}
+	function addFinal() {
+		var element = elementtoadd;
+		searches.push(songname);
+		var domstring = `<div><button onclick="playSong(&quot;` + filename + `.mp3&quot;)"><b>` + songname + `</b></button><div onclick="substract(this)" class="switchediting">-</div></div>`;
+		element.parentNode.innerHTML += domstring;
+		var elems = document.querySelectorAll('.switchediting');
+		for (var i=0;i<elems.length;i+=1){
+			elems[i].style.display = 'inline-block';
+		}
+	}
+	function add(element) {
+		elementtoadd = element;
+		Prompt.render('Please enter a song name:','getPromptSongName');
+	}
+	function substract(element) {
+		var songname = element.parentNode.firstChild.firstChild.innerHTML;
+		const index = searches.indexOf(songname);
+		if (index > -1) {
+  			searches.splice(index, 1);
+		}
+		element.parentNode.remove();
+	}
+	function addTitle(element) {
+		var titlename = prompt("Please enter a title name:", "");
+  		if (titlename == null | titlename == "") {
+    			return;
+  		} 
+		var domstring = `<div>
+					<p><h1>` + titlename + `</h1></p>
+        				<p>
+            					<div><button onclick="playSong(&quot;&quot;)"><b>Stop</b></button><div onclick="add(this)" class="switchediting">+</div></div>
+        				</p>
+					<div onclick="substractTitle(this)" class="switchediting">-</div>
+				</div><br>`;
+		element.parentNode.innerHTML += domstring;
+		var elems = document.querySelectorAll('.switchediting');
+		for (var i=0;i<elems.length;i+=1){
+			elems[i].style.display = 'inline-block';
+		}
+	}
+	function substractTitle(element) {
+		element.parentNode.nextSibling.remove();
+		element.parentNode.remove();
+	}
+	var editbool = false;
+	function edit() {
+		var elems = document.querySelectorAll('.switchediting');
+		if (editbool) {
+			for (var i=0;i<elems.length;i+=1){
+				elems[i].style.display = 'none';
+			}
+			editbool = false;
+		}
+		else {
+			for (var i=0;i<elems.length;i+=1){
+				elems[i].style.display = 'inline-block';
+			}
+			editbool = true;
+		}
+	}
+    </script>
+    <script>
+        var elem = document.getElementById('search');
+        var el = document.getElementById("page");
+        var originalHtml = el.innerHTML;
+	var stringsearches;
+        function search() {
+                var searchword = elem.value;
+        	if (searchword != '') {
+        		var newHtml = originalHtml.replace(new RegExp('<b>' + searchword + '</b>', "g"), '<b>' + searchword.fontcolor("orange") + '</b>');
+        		el.innerHTML = newHtml;
+       	 	}
+        	else {
+    			setTimeout(function() {
+    				document.querySelector('#wait').style.display = 'block';
+    			}, 0);
+    			setTimeout(function() {
+    				deleteSearchWords();
+    			}, 100);
+       	 	}
+        }
+        function save() {
+    		setTimeout(function() {
+    			document.querySelector('#wait').style.display = 'block';
+    		}, 0);
+    		setTimeout(function() {
+			deleteSearchWords();
+			var markup = document.documentElement.innerHTML;
+			saveDocument('webViewerAudio', markup, stringsearches);
+    		}, 100);
+	}
+	function deleteSearchWords() {
+		stringsearches = '[';
+		searches.forEach(function(search) {
+			if (search != "") {
+				stringsearches += '"' + search + '", ';
+				originalHtml = el.innerHTML;
+        			var newHtml = originalHtml.replace(new RegExp('<b>' + search.fontcolor("orange") + '</b>', "g"), '<b>' + search + '</b>');
+        			el.innerHTML = newHtml;
+			}
+		});
+    		document.querySelector('#wait').style.display = 'none';
+	}
+	function playSong(song) {
+            demoAbout(window.navigator.appVersion, song);
+	}
+    </script>
+<script>
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+        	if (e.keyCode == 13) {
+        		search();
+        	}
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/*An array containing all the country names in the world:*/
+var searches = ["Enemy Inside Phoenix 1", "Killstation Extinction", "DRACONIAN Sleepwalkers", ""];
+
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("search"), searches);
+
+</script>
+
+	<script>
+		function CustomAlert(){
+		this.render = function(dialog){
+		var winW = window.innerWidth;
+		var winH = window.innerHeight;
+		var dialogoverlay = document.getElementById('dialogoverlay');
+		var dialogbox = document.getElementById('dialogbox');
+		dialogoverlay.style.display = "block";
+		dialogoverlay.style.height = winH+"px";
+		dialogbox.style.left = (winW/2) - (550 * .5)+"px";
+		dialogbox.style.top = "100px";
+		dialogbox.style.display = "block";
+		document.getElementById('dialogboxhead').innerHTML = "Acknowledge This Message";
+		document.getElementById('dialogboxbody').innerHTML = dialog;
+		document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">OK</button>';
+		}
+		this.ok = function(){
+		document.getElementById('dialogbox').style.display = "none";
+		document.getElementById('dialogoverlay').style.display = "none";
+		}
+		}
+		var Alert = new CustomAlert();
+		function CustomConfirm(){
+		this.render = function(dialog,op,id){
+		var winW = window.innerWidth;
+		var winH = window.innerHeight;
+		var dialogoverlay = document.getElementById('dialogoverlay');
+		var dialogbox = document.getElementById('dialogbox');
+		dialogoverlay.style.display = "block";
+		dialogoverlay.style.height = winH+"px";
+		dialogbox.style.left = (winW/2) - (550 * .5)+"px";
+		dialogbox.style.top = "100px";
+		dialogbox.style.display = "block";
+
+		document.getElementById('dialogboxhead').innerHTML = "Confirm that action";
+		document.getElementById('dialogboxbody').innerHTML = dialog;
+		document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Confirm.yes(\''+op+'\',\''+id+'\')">Yes</button> <button onclick="Confirm.no()">No</button>';
+		}
+		this.no = function(){
+		document.getElementById('dialogbox').style.display = "none";
+		document.getElementById('dialogoverlay').style.display = "none";
+		}
+		this.yes = function(op,id){
+		if(op == "delete_post"){
+		deletePost(id);
+		}
+		document.getElementById('dialogbox').style.display = "none";
+		document.getElementById('dialogoverlay').style.display = "none";
+		}
+		}
+		var Confirm = new CustomConfirm();
+		function CustomPrompt(){
+		this.render = function(dialog,func){
+		var winW = window.innerWidth;
+		var winH = window.innerHeight;
+		var dialogoverlay = document.getElementById('dialogoverlay');
+		var dialogbox = document.getElementById('dialogbox');
+		dialogoverlay.style.display = "block";
+		dialogoverlay.style.height = winH+"px";
+		dialogbox.style.left = (winW/2) - (550 * .5)+"px";
+		dialogbox.style.top = "100px";
+		dialogbox.style.display = "block";
+		document.getElementById('dialogboxhead').innerHTML = "A value is required";
+		document.getElementById('dialogboxbody').innerHTML = dialog;
+		document.getElementById('dialogboxbody').innerHTML += '<br><input id="prompt_value1">';
+		document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Prompt.ok(\''+func+'\')">OK</button> <button onclick="Prompt.cancel()">Cancel</button>';
+		}
+		this.cancel = function(){
+		document.getElementById('dialogbox').style.display = "none";
+		document.getElementById('dialogoverlay').style.display = "none";
+		}
+		this.ok = function(func){
+		var prompt_value1 = document.getElementById('prompt_value1').value;
+		window[func](prompt_value1);
+		document.getElementById('dialogbox').style.display = "none";
+		document.getElementById('dialogoverlay').style.display = "none";
+		}
+		}
+		var Prompt = new CustomPrompt();
+	</script>
+</body>

@@ -1,0 +1,1101 @@
+<head>
+    <meta charset="fr_FR.UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body, #page {
+            background-color: black;
+            color: white;
+            width: 100%;
+            overflow-x: hidden;
+            margin-bottom: 60px;
+        }
+
+        #page p, h1 {
+            margin: 10px 15px 0px 0px;
+            text-align: justify;
+            padding: 0px 10px 0px 10px;
+        }
+
+        #page a {
+            white-space: nowrap;
+            color: white;
+            margin: 10px;
+        }
+
+        #page div div {
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+            #page div div.switchediting {
+                display: none;
+            }
+
+        #page p.switchediting {
+            display: none;
+        }
+
+        #wait {
+            display: none;
+            position: fixed;
+            padding: 0;
+            margin: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+        }
+
+            #wait h1 {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                position: absolute;
+            }
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #444;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #eee;
+            }
+    </style>
+    <style>
+        #dialogoverlay {
+            display: none;
+            opacity: .8;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            background: #FFF;
+            width: 100%;
+            z-index: 10;
+        }
+
+        #dialogbox {
+            display: none;
+            position: fixed;
+            background: #000;
+            border-radius: 7px;
+            width: 550px;
+            z-index: 10;
+        }
+
+            #dialogbox > div {
+                background: #FFF;
+                margin: 8px;
+            }
+
+                #dialogbox > div > #dialogboxhead {
+                    background: #666;
+                    font-size: 19px;
+                    padding: 10px;
+                    color: #CCC;
+                }
+
+                #dialogbox > div > #dialogboxbody {
+                    background: #333;
+                    padding: 20px;
+                    color: #FFF;
+                }
+
+                #dialogbox > div > #dialogboxfoot {
+                    background: #666;
+                    padding: 10px;
+                    text-align: right;
+                }
+
+        #dialogboxbody input {
+            width: 485px;
+        }
+    </style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 16px Arial;
+        }
+
+        /*the container must be positioned relative:*/
+        .autocomplete {
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            input[type=text] {
+                background-color: #f1f1f1;
+                width: 100%;
+            }
+
+            input[type=submit] {
+                background-color: DodgerBlue;
+                color: #fff;
+            }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+            .autocomplete-items div {
+                padding: 10px;
+                background-color: #000;
+                border-bottom: 1px solid #d4d4d4;
+                display: block;
+            }
+
+                /*when hovering an item:*/
+                .autocomplete-items div:hover {
+                    background-color: #444;
+                }
+
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="wait" style="display: none;">
+        <h1>Wait...</h1>
+    </div>
+    <div id="dialogoverlay" style="display: none; height: 768px;"></div>
+    <div id="dialogbox" style="left: 408px; top: 100px; display: none;">
+        <div>
+            <div id="dialogboxhead">A value is required</div>
+            <div id="dialogboxbody">Please enter a link:<br><input id="prompt_value1"></div>
+            <div id="dialogboxfoot"><button onclick="Prompt.ok('getPromptLink')">OK</button> <button onclick="Prompt.cancel()">Cancel</button></div>
+        </div>
+    </div>
+
+    <div class="autocomplete" style="width:300px;">
+        <input id="search" type="text" placeholder="search">
+    </div>
+    <input type="submit" onclick="search();" value="Search">
+    <input type="submit" onclick="save();" value="Save" style="float:right;margin-right:15px;">
+    <input type="submit" onclick="edit();" value="Edit" style="float:right;margin-right:15px;">
+    <div id="page">
+        <p></p><p onclick="addTitle(this)" class="switchediting" style="display: none;">+</p><p></p>
+        <div>
+            <p></p><h1>Chill</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCicfD-BPShEb0-NqSXs3qZA/videos'"><b>Volcano On Mars</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPfXFd4eoyPWMYVZAgwzADg/videos'"><b>LOUDEN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkFgRdbsN5d6gVqMB_lVaQg/videos'"><b>ARTBAT</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCYGj7amTucm1MmbVL8JfKSw/videos'"><b>DeepMe</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCbC7IHYAR2FhLtiB6Hzs7kQ/videos'"><b>Lilly Palmer</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCDf6reK_hHcz0d7KWBhmPhA/videos'"><b>Art of Minimal Techno Trip</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC1Tr6S-XLBk1NzNX1jErWMg/videos'"><b>Cafe De Anatolia</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCtJEJRMW5m8SEemtIoXrBNw/videos'"><b>Code</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCsbGfv8K_G1APobRzDdCdTg/videos'"><b>Dennis Lloyd</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCMO1D17dUCd2bHhKAyiZ6uQ/videos'"><b>GroundBass TV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCAhGuBCzuMgH9yW5ezq8-EA/videos'"><b>Aim To Head Release</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyI1D9N2OvZif9a2JhV_nrA/videos'"><b>Aim To Head Mix</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC1KJEk-EZMmDF9DJKMK5OCQ/videos'"><b>Aim To Head Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNB-RpjTUWBCOVyLv_5BfMw/videos'"><b>SoundScape Records</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCtxybFBeqCLihVkxAvWGWkQ/videos'"><b>omer gigi</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCaUGB1WZVz7yFkBuoFhqpdQ/videos'"><b>Vado</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCKYtbLhp5EuENMbW8UVLkYg/videos'"><b>Dave East</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCK8EGFTFEHTQ_JFSwYdXGYg/videos'"><b>HOMmega</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCIitwYtRrd2JGTTe1B0IAJA/videos'"><b>Magic Music Mix</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCp6_KuNhT0kcFk-jXw9Tivg/videos'"><b>Magic Music</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCnqZ3v5Jjga1CBopGWJTMCA/videos'"><b>Extended Music</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCpy5RCOLhiPC4cNqb1P01mA/videos'"><b>MELODY Records</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCao7ExhXQSwNvZEW6xEPPNQ/videos'"><b>NewAgeWave</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCiLgZudPCMyHk5fUP6OUDLw/videos'"><b>Rapha Stamatopoulos</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCigSgBzRaVs1xGuCEEwzuZA/videos'"><b>Versus Music Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCYXJzOstfzjnZJ-zZyjO48Q/videos'"><b>Invisible Reality</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvImPACGPPJ2ydFYMzFfDtg/videos'"><b>Deep Departure</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_IVhAlM2q2tFtCXP3R0ncw/videos'"><b>Vertex Records</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCIlYR2ctJijP9ndSRw4W88g/videos'"><b>Static Movement</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPKT_csvP72boVX0XrMtagQ/videos'"><b>Cercle</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCljsGZjRVayVZHgSAxeSafg/videos'"><b>Galacy</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSXm6c-n6lsjtyjvdD0bFVw/videos'"><b>Liquicity</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UClA7J-lgi0iOIB2PfNTxJSQ/videos'"><b>Savvas Kalt</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC66mav6fDZnFErxJhkWBz6w/videos'"><b>Kalki</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCc3zojKlgvUkBs1N1WCpIrQ/videos'"><b>Psychedelic Island</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-3LBKfcHoj-zc2J2vRCkcw/videos'"><b>Serotonin Sound</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUq4FP_9pOdMi3wy4C7kRGQ/videos'"><b>Speedsound</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6d2830z8J_0N1AsOXo81ZQ/videos'"><b>Goa dark</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCZTOKqqwA74X1Oo4gnNn_kw/videos'"><b>Trance Nation</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUyRfQ7hKQJCsgfG0sEbhLQ/videos'"><b>Vasho</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCy9m42TK6xAWhCKU-ZxJI1A/videos'"><b>ADDICTED</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCQGVxnl1P1xnWwndN198TEA/videos'"><b>MORPHINE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCmyVhFZdVfICpi9GjVbcOAA/videos'"><b>Matchy</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCbl0EK62butUubZwujpNPNg/videos'"><b>Oliver Huntemann</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCpSUnFhhGXStSOu9oQRQmLQ/videos'"><b>Alessandro Martire</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUpHLJKLWCM7dA-6YfxBVWg/videos'"><b>Innellea</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC9FM1egkCFesmDoax2ZrB6g/videos'"><b>Life and Death Forever</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCtbp1FuSC63PgDhGSTMenGQ/videos'"><b>Labo T.</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCTfT_d-WLdBpWWbEM46mPGw/videos'"><b>Soul Button</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC5M3SKjvbqCXGeQrxkv0ktw/videos'"><b>D-Nox</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCXAhoI7XO2kafTMjocm0jCg/videos'"><b>Flume</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvCfRGvwzOBO7hat21DGRPQ/videos'"><b>Paul Kalkbrenner</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCeOuY27OfgZ5n3F581yV8uQ/videos'"><b>Rammor</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCozj7uHtfr48i6yX6vkJzsA/videos'"><b>This Never Happened</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-yOW3e6zBSo1JwLXq46Suw/videos'"><b>Charlotte de Witte</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrJ9Cdr93XCbU_waM0gbBqQ/videos'"><b>Cafe De Anatolia ETHNO WORLD</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRgn1KPoJrvRqLxj0t0JQgA/videos'"><b>Tchami</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-EVnno6x6-aAG6g1ZVoN3A/videos'"><b>Oliver Heldens</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_MP8bjREeluADVL1XguuUQ/videos'"><b>Ohm Mind</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_jcTgf3k3DAIMMcABNXHbg/videos'"><b>Tekla DuDuchava</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCN8v8tNOCmaZaN-t4ynDdEA/videos'"><b>Solomun (Official)</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6l7UEKVSlNIjC3U-NFFyMw/videos'"><b>UNITY</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCg2JFUP67ZdKzehy8TWMUmw/videos'"><b>Amelie Lens</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCOjTxt7xBAjh1NraToYYlog/videos'"><b>Eric Prydz</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCWQ0aKGpXqR6zw1yT-rQygA/videos'"><b>Blanco White</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCk40qSGYnVdFFBNXRjrvdpQ/videos'"><b>Taylor Davis</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCcG527x3OjxxCkUROwYg4XA/videos'"><b>Trey J. Anderson</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCh_F0VRprS4yx3urdcl4FRQ/videos'"><b>ksherwoodops</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNgDaVUT562z5wVhOU5t30Q/videos'"><b>Felix Krocher</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCWzGCSf-1fluXYvVOuh-aVA/videos'"><b>Tycho</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC9Ck5PhnqY4-jsn9W2KvTuw/videos'"><b>MORTEN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCxhd0BvP8mL7QF20bPDNrKg/videos'"><b>Karma Fields</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCKp7UVaoVuiW1qtyPLPVFMQ/videos'"><b>Diplo</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCb1A3nXgz1g6Gk9BsETVcog/videos'"><b>Mike Candys</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC0I3pDl3Cx4hLc2ooy3tF-A/videos'"><b>Zyce</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJMW4ub3OdMsqDdluWrXMDg/videos'"><b>Azax</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCnVKOq-ZGQRwf9vz3ro2fsA/videos'"><b>Mimra Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdUXAN90UQV4sxNehj5Vflw/videos'"><b>Nora En Pure</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCMBUY8awHfFEf0Iu3XrvZfA/videos'"><b>Antdot</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC0VG86SRO2X47HU20nQtDeA/videos'"><b>KOROLOVA</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCODL36hH384Sbh3YVxRViyQ/videos'"><b>Hozho</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdip_kXnx-tG-PPln7qS_fA/videos'"><b>Droplex Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCH3RGiX9bimOPwQmEgrMAtg/videos'"><b>Afterlife</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6iin46o7SrAsnl9ig__vlw/videos'"><b>RUFUS DU SOL</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRHptx-FEuCi4ubxoIO_kXw/videos'"><b>Daniel Deluxe</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUI1wJNgcNIX3UgYrzuoYaw/videos'"><b>Cosmic Gate</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPGr21v3yJpKPmr_KAypHFg/videos'"><b>Electro Junkiee</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUUDZjVXy3yL-NlUUC4sNaw/videos'"><b>RYDHM DEE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCfh736PxffH8T4W_3ONsfyg/videos'"><b>Nano Ohm</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvA3PJa3D5c9N1maBrHMXmw/videos'"><b>Sub6TV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJM_48FfAcgmnm41r5KGuuA/videos'"><b>Lifeforms</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCnO74K9WAa-FXg6klqBhiBQ/videos'"><b>Outsiders Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCMAlx4XFAMt4xtItA-4InnQ/videos'"><b>Juno Reactor</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCsMJdYQ1Ua15k-Rqrp04FfA/videos'"><b>Atomic Pulse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCws-V85pEnasbxZulhKHUhQ/videos'"><b>Freedom Fighters</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCXrF6b29-qpqpHmwv-pon8A/videos'"><b>Alpha Portal</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCxRhhvdQI7RufapdU-Kyy2w/videos'"><b>MAJOR7 X-NOIZE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSvv0vpCTvpF-Cy44XAs5Gw/videos'"><b>Mose</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC9cX3cZUiLtAmJKVMUhCxVQ/videos'"><b>Adana Twins</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCeXbW5CJ2Vb32VOmSNjIsUQ/videos'"><b>DJ NightStar</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUMVYGGO-OWoEKZbsFtCYeg/videos'"><b>E-Mantra Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCFQHFHX2p6gLpmNJVTDO3ew/videos'"><b>Protonica</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSZ0PaHNNhXrvWptv0i7r8g/videos'"><b>Electric Samurai</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPaZcPCEOwAPT3_wwNJKZVA/videos'"><b>Ovnimoon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCsfo7TDmSy2Ed3EY_JQDTtg/videos'"><b>Avalon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChfawbJdUuHCTo1q-JG0OCg/videos'"><b>Ace Ventura</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCp2F1GDhk-ZGk_ZISqd3ABQ/videos'"><b>Vini Vici</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC50R8A6Ldk39x6Um1sq01bQ/videos'"><b>Ticon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCYmflaVaYnvvRz5n-Gtm8lA/videos'"><b>BLiSS</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCbpz4xAsG69SaN14AXeXA3Q/videos'"><b>Perfect Stranger</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCcMgvxv_EuOWUdAwtwCXUVA/videos'"><b>Out of Orbit</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCA7tnKqKXjqmvNWrLxmF7Pg/videos'"><b>Animato Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCZMyvcFZGkFjk4j1jfEiyMQ/videos'"><b>RITMO</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCsBSMQZsiLprSY6GqhI25Jw/videos'"><b>Astrix Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkUBhVRG7sWo7EgFD7dADyA/videos'"><b>Yotto</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCswumVYAf0SKczPSoRGHxcQ/videos'"><b>Worakls</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdHq5J9iZoW_pO7kTjkbfug/videos'"><b>Vertical Mode</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCz0GJVTr8FrGAT4vElreSOw/videos'"><b>Thylacine Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6R_rPY5JImFrnb46vfKL5g/videos'"><b>STEPHAN BODZIN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC877kk3HLR31M26Xst_0ENA/videos'"><b>Immortal Technique</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCa3vT97_CxFzwC9j_BZZCGw/videos'"><b>Giorgia Angiuli</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCcD2m31A6Q2yetdHgWjnmpw/videos'"><b>Enrico Sangiuliano</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCY6OzINlclnNqN0uBms1Zuw/videos'"><b>Fernanda Pistelli</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyRw5ZEQ2mVwNKq9GnSTHRA/videos'"><b>Psychedelic Universe</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCADDIM3Lrhfxj6-TOsZ19Iw/videos'"><b>Space Noise</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCsKTGCXz5AtR4EV1mMwpuYA/videos'"><b>DJ Titio</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCMg7TTDtUXq2yTu3uqqoprQ/videos'"><b>Epidemic Electronic</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCzolMvIqyoK6hV345m6FjTg/videos'"><b>ChilloutDeer</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSAjUPxWbsAnbfs4Q90fJbw/videos'"><b>Robert Miles</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC7IZbkKDd20v6Ni_vFX63rQ/videos'"><b>The Prodigy</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC3_wlMNxKBG4c_P39zFH6Hw/videos'"><b>KREAM</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCug457-Y1J1UO2HkInV1R6w/videos'"><b>MrLemilica</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_S803Fwu2NlUiNFkPu_wLQ/videos'"><b>MrLemilica 2</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCuY3G5w2wvFOMzAmK8AuxuA/videos'"><b>Maximum Sound</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyQKoLtVor_r1OCOBgeOofQ/videos'"><b>Sound Territory</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCVE-ybBDg3UHSUylEVdPAsw/videos'"><b>Above &amp; Beyond</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCTPjZ7UC8NgcZI8UKzb3rLw/videos'"><b>Fluidified</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCeM3XyUzi7bLheQrLzFnHlg/videos'"><b>MADIS</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCoUaScN6XEQldL45dkk1cXw/videos'"><b>DJanes Net</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCgUg4tq-8A3zuO2KOcpaM2Q/videos'"><b>NME</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCZ8YN9u9H_tRTi2LTODoXLg/videos'"><b>SpaceAmbient</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCm3-xqAh3Z-CwBniG1u_1vw/videos'"><b>Ambient</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCAepXw94EhaO0CZV9f5D3fQ/videos'"><b>The Psychedelic Muse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCukezONa4veoJBeK9UuVZew/videos'"><b>Boris Brejcha</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCACOLQMzHjoIXDGqC2OloOQ/videos'"><b>Boris Brejcha Club</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCxebkO4OJxj3sUWJj4dH1ug/videos'"><b>LORN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Rock</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCe9rl8k6yymUeVzzXfFGWwA/videos'"><b>Godsmack</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkf1qXnPr1vhLPgCG86oppw'"><b>CheVelle</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCwkBWcpZqko9qA9UfZ0negA'"><b>Like A Storm</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCAkyTAIGRZFFzpO12zfj6wA/videos'"><b>Nonpoint</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCK7wTMguyPyPCjhLoOK2rJg/videos'"><b>THIRTY SECONDS TO MARS</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCcGuSNZQ9u9FMUNM1k3UpRA/videos'"><b>Kingdom Collapse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCEdY-7ISJOE70V-jVebefIg/videos'"><b>Silent Theory</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCbzeJvIzespNCajha0_1sgw/videos'"><b>Villain of the Story</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UC5MWh1k90KULpPOeXAzoIZA/videos'"><b>Motionless In White</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCK9X9JACEsonjbqaewUtICA/videos'"><b>Alice In Chains</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCY2qt3dw2TQJxvBrDiYGHdQ/videos'"><b>Pink Floyd</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UC3bLiTc7_UpKSl0dnYR-d3A/videos'"><b>HDPinkFloyd</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCyZe0Uc78q7aEA7bFKtZ-oA/videos'"><b>Jethro Tull</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCKYHAbCvrMdnEOILy4Oz0Fw/videos'"><b>Spaceuntravel</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrx-X329UKv0Y06VhfpFVvw/videos'"><b>Black Sabbath</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCHbkB_W_PJMFNe7R-QWvwCw/videos'"><b>ROAR! ROCK OF ANGELS RECORDS</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC7Xt2agmtcN60kxbOvYs25Q/videos'"><b>Enemy Inside</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdIh_zw9eG1kZhQto2CYkRg/videos'"><b>DEVILSKIN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvoGL8YEWGdj4aj2Fnp1sQw/videos'"><b>killstation</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRFHKKNGdaIs9NaULSUuKGw/videos'"><b>Drowning Pool</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCwvCvg1FjwsHIFP59G6dL2A/videos'"><b>Despotz Records</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCewVn74tl8yDQdjHxn-xbLg/videos'"><b>Nothing</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCBcnksHgEGsOe3iz9NeeM8g/videos'"><b>Chaoseum</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC34wpCgr3l9cG0RtFdTTS-Q/videos'"><b>Gojira</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCCacqQjX_HQp4HokuczhvlA/videos'"><b>Monsieur Ruchenstein</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJeH7gl6PbDVV4DTldIOPOA/videos'"><b>Evanescence</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC0lhr4dvpfKJ0C3TPFXu3ww/videos'"><b>Seether</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_EucbjTiD1OQ6IV-l2uCJA/videos'"><b>City Morgue</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCVHOgH4XEyYx-ZEaya1XqCQ/videos'"><b>Cryo Chamber</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCGGhM6XCSJFQ6DTRffnKRIw/videos'"><b>Muse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCqbLoWGCJ2VTERCZab93QGg/videos'"><b>Black Me Out</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChK_wCJmjHXgGVvTJ5a9vfQ/videos'"><b>Shogun Audio</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC7-YMmnc0ppcWmio8t1WdcA/videos'"><b>System Of A Down</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCaiQD1j4sHOtRJJXP4vZjlQ/videos'"><b>serjtankian</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCYgJ2M1mq8Ae0QOm_VQU4VQ/videos'"><b>The Doors</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6ly_u2ufiHGpYzC_28-8zw/videos'"><b>kornchannel</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCsyBVa0eTR-lL0sRnKpIe8w/videos'"><b>GHOSTEMANE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjPsvugkwOr9oOk8D7icstQ/videos'"><b>Halestorm</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCQplaZZ2mv8fo8Zd-1hQPzg/videos'"><b>Nightwish</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UClSG_GssDNgxTsI1c1zVsLA/videos'"><b>Pain</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCveWMJeHgcIUPMnFzd7Vxjg/videos'"><b>Disturbed</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCQjw3b3Ay5zMmEHUAxL93Rw/videos'"><b>Five Finger Death Punch</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCm_W_hbwbzJE8w52jZ2NO0A/videos'"><b>Rage Against the Machine</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCFMZHIQMgBXTSxsr86Caazw/videos'"><b>Nirvana</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCOJZ1tna8yj8mAEITPkHNCQ/videos'"><b>Slipknot</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCmWxquutalJ1ZjdmWLdlhSg/videos'"><b>Spiritbox Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJDON3eLf8709E9YfjAgLOw/videos'"><b>Three Days Grace</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCAayZDDj3uom0QpSJiwLoUw/videos'"><b>Bring Me The Horizon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJhe07czqzg4UzpjvQWkmMQ/videos'"><b>Breaking Benjamin</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC3zYZhEZMfxSi0KC6ugHLKQ/videos'"><b>FIGHT THE FURY</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCv8xpzILpS2IKEd8CUuGd-Q/videos'"><b>Thousand Foot Krutch</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC78hVSliukmLMdERG-FvwCw/videos'"><b>staticx</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvGKCmYxjlI2gT_HtNrXKMw/videos'"><b>Nine Lashes</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCE8NoMFnai3tTuwdiQJ-78A/videos'"><b>Skillet</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCWCCX3PfK4BUH8E-ImT86AQ/videos'"><b>Icon For Hire</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCN5TtLA08ojleJetZQSHc6w/videos'"><b>SOiLVEVO</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCiyqpG37FD1BgmP-y33Et6Q/videos'"><b>Hardigun</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC9GBCq8OAI6-7EJz7y6Z6zA/videos'"><b>Draconian</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCG7AaCh_CiG6pq_rRDNw72A/videos'"><b>Napalm Records</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4BSeEq7XNtihGqI309vhYg/videos'"><b>Jinjer Metal Band</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4_yA-FDGB3Zwmk96E7yujA/videos'"><b>Lamb of God</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyFKAEe7ef_yoJxYwBQ307A/videos'"><b>Ra Official</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Rap</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCMKzMQWJtxD6tHYGBylfDqQ/videos'"><b>Jordan Adetunji</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCHsLqoi00xf5mi2CEOy9ugg/videos'"><b>PlayaPhonk</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCv5FkNYxboERW_yuVsuZ_cw/videos'"><b>Snøw</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCTTL1djMcMA7t92XcHz-b-w/videos'"><b>Snowgoons</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCQc4KWB2a49eQeNOoi7eJfQ/videos'"><b>Thug4Life</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC0gOw4iy-6HwO01q-gA1B0Q/videos'"><b>Lil Peep</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCy1PnulzEixUtsR-w-Pgd4w/videos'"><b>Lil Darkie</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-0Urs9tifl-7DDE1RLbBHQ/videos'"><b>scarlxrd</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCfM3zsQsOnfWNUppiycmBuw/videos'"><b>EminemMusic</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPgj65A5ZQz3PftAOoB2J2Q/videos'"><b>officialdevlin</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCZYVfumQrMOSAL_ERPxlkZg/videos'"><b>Ghetts</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNfKDZaPms73iiPSlKvTAcg/videos'"><b>Pimp My Bass</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdARoxad2UaIQPDy6fbz4Nw/videos'"><b>Ski Mask The Slump God</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRnjMKMp4SE7vzLeqwkwWIg/videos'"><b>Five Finger Posse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRVcSuyqciSi5crgSawXk6Q/videos'"><b>TRILLPHONK</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCpZoKV4npX0OGMdw5c_5cfw/videos'"><b>MVKO</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-ciXrv4h_IE3ga1dMfTUdA/videos'"><b>scroll忍</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-dtJxMXI0aBzWnGcKUe8WQ/videos'"><b>UNAVERAGE GANG</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCAsptD_XMmQdzRxlkWkEd_A/videos'"><b>ManBetterKnow</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC1333qMJyHswZr5OlFgOZxw/videos'"><b>Sixthells</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCU5AbNuMPGB491GcqXuzwKw/videos'"><b>$uicideboy$</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_XXxVIyWr3wuMO_yNEWZvQ/videos'"><b>Prompto</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkQ62tvPlVVb2WLppjRfPdQ/videos'"><b>ＴＲＡＳＨ 新 ドラゴン</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Pop</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCuRwdG_2dvII6VaJPppXqAw/videos'"><b>Rag'n'Bone Man</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCSE3pqd3sqRtIJiVlAUSy6g/videos'"><b>Phantogram</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCq19-LqvG35A-30oyAiPiqA/videos'"><b>Radiohead</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCT9zcQNlyht7fRlcjmflRSA/videos'"><b>ImagineDragons</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCfpAqBgkmI4wNCR_iZWfBxg/videos'"><b>Rosie Carney</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCeKdqQvaWCTvFXRdDetEg9w/videos'"><b>REVERIE LOVE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCN7gplqpfnrT-mxjoTR4ENg/videos'"><b>Tove Lo</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCscDWYhNER2NvEVKfL0aYwA/videos'"><b>The Blaze</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC1oCOqdqlNDz5Sxnlk08ZrQ/videos'"><b>London Grammar</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCXzPTTX-VxZr5jiWxytz8hA/videos'"><b>Monolink</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCGbyt2Lm2WlWULsMuhMeZvg/videos'"><b>NTO</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC0C-w0YjGpqDXGB8IHb662A/videos'"><b>Ed Sheeran</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRdVg6Xj_Az9YOsqDzLRbtA/videos'"><b>Skylar Grey</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_aEa8K-EOJ3D6gOs7HcyNg/videos'"><b>NoCopyrightSounds</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCbZwuzaZlbAPufYumFnudWw/videos'"><b>Cats On Trees</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCi4EDAgjULwwNBHOg1aaCig/videos'"><b>OneRepublic</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC7aBstV8p4mceOAVJr6WAGg/videos'"><b>Jérémy Frerot</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Creation</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCKsO3tjZNcKtRTYfhv-rQuA/videos'"><b>Yannick</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCl7dSJloxuCa9IBFml7sakw/videos'"><b>PolyMars</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJRwb5W4ZzG43J5_dViL6Fw/videos'"><b>TUTO UNITY FR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCG08EqOAXJk_YXPDsAvReSg/videos'"><b>Unity</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCwYuQIa9lgjvDiZryUVtFGw/videos'"><b>SpeedTutor</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Discover</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCb6IaF9LX5KlUXQqHFq2xbg/videos'"><b>LifesBiggestQuestions</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCpHjRsNuiIfaJR1n_9I0EvQ/videos'"><b>Kristina Rybalchenko</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCDI_nH78WWDr4ujtgBFj0Fw/videos'"><b>Gossip Gloss</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCh2YBKhYIy-_LtfCIn2Jycg/videos'"><b>Mr. Sam</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCqEVwTnDzlzKOGYNFemqnYA'"><b>RT France</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCGn3-2LtsXHgtBIdl2Loozw/videos'"><b>sina-drums</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCukbnzZSfOVmszwwHGK7tqw/videos'"><b>LaBajon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCj6k0OMcXT9c9wBCbEK4_Zw/videos'"><b>Ganginou !</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCWQr04hePCrjzYjqpcKJSGw/videos'"><b>Starlight Français</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UC6WKkNbUgNvnLBKWUIq2f2A/videos'"><b>aTech</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCK3inMNRNAVUleEbpDU1k2g/videos'"><b>SEB</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCA9U3lyRLUyy0ni4XBw-Qdg/videos'"><b>Burls Art</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCE0M6L7aav9SrOJw6vyBAXg/videos'"><b>julie artis</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCUo1RqYV8tGjV38sQ8S5p9A/videos'"><b>HugoDécrypte</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCdld7SHk9IyYSkNrHA9B6Dw/videos'"><b>A-YEON</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSEPLnkG2lDl1BxBtEB1XwA/videos'"><b>Planete RAW</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCDC6DBi0kRp6Jk21xqfvFLA/videos'"><b>Hugo Lisoir</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4MsAe2ZQEcAKbxx03_Y4vg/videos'"><b>TheSimplySpace</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCl2XhMlonptwPbIbz9h85ww/videos'"><b>Un regard sur l'Espace</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCaNlbnghtwlsGF-KzAFThqA/videos'"><b>ScienceEtonnante</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCypzG0nv9B65DwOLJ578rZQ/videos'"><b>Le Journal de l'Espace</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCaVu0Q-oSR83kPyFjSFp5cg/videos'"><b>Anis Rhali</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNOlbdkDnZqAwQCnugSwc0g/videos'"><b>Code Name: Reaction</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_MTPqgFSm_8WUWaCHIfUgQ/videos'"><b>V101 Science</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyeoIdJHgQhOrct9mVJ2fTQ/videos'"><b>Le Petit Astronome</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCwI-JbGNsojunnHbFAc0M4Q/videos'"><b>ARTE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCHAK6CyegY22Zj2GWrcaIxg/videos'"><b>VISION</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC5bH6_h7gsNYoWhYwQPS86A/videos'"><b>Looking 4</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCIFtADcWrOApqrsinzPoOfA/videos'"><b>Destiny</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJNoPkgW0KSKzBHgFJ3VRtQ/videos'"><b>Jetson</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCzKH70qfN_yuXq3s91fdwmg/videos'"><b>TV5MONDE Info</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCQsb5TqYUeGWGpJFr8DMWsQ/videos'"><b>ANONIMAL</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCYR83xZ5fKf671Lj5NwafDw/videos'"><b>Corneil &amp; Bernie | Officiel</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCnZ3EBuzurcisrR8jPqIzrw/videos'"><b>Les Dalton</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCOLk9tXeX8QI66ZYeW_vO-g/videos'"><b>Mathias</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Game</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvaNrBH1GS0zcBjc8dHjVNg'"><b>Omega Racing</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCHgvBc9v2t7YPsEtTHwtd8Q/videos'"><b>Gautoz</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCHiwUSmH0u6p-EEHixFVMRw/videos'"><b>dashup!</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UC2xUFf8ITVLGO_kF7mITieA/videos'"><b>David Larose</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCcCJYzgr-F610Rjzr_-FJcg/videos'"><b>Pandorya</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNvzD7Z-g64bPXxGzaQaa4g/videos'"><b>gameranx</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRhflCjjz84W6uiHQQK_flw/videos'"><b>At0miumVOD</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCI0LNmSlhS-H9mGNPWM8gzQ/videos'"><b>At0mium</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCGhs9S33RAeT5DEuKTO4Oew/videos'"><b>Force Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCqcIux3vgixlPd7_ud8S3ZA/videos'"><b>STAF_52</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-OvBDfZGn1OdsqMBwkOI_A/videos'"><b>Seldell</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCtrsQWoKjG-PVyonkTtKWxQ/videos'"><b>Le Bon, la Brute et le Geek</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCCd3jyJmOFzkJEMj5Bp89rw/videos'"><b>Best Indie Games</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCKqs0zitJzxu0LYfxlrLWBQ/videos'"><b>Suliven GAMING</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC3jdvI5ltyDmgiCaqHVqIZg/videos'"><b>Actu Jeux - IamYunie</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCw0Yw90Osl4u4_ydywGK6PA/videos'"><b>Katagena Channel</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCzPq_GNoEb6qpsw0sM5HPqA/videos'"><b>ActuGaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Bullshit</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCItUtSRCuADQCtSydr4n2OQ/videos'"><b>JeanBaptistePlay</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCYnvxJ-PKiGXo_tYXpWAC-w/videos'"><b>Micode</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCc3auP4KRed7dDBQEtYslbw/videos'"><b>Micodeux</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCWedHS9qKebauVIK2J7383g/videos'"><b>Underscore_</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCM7IrgSmry4z3pKXf2L3uuQ/videos'"><b>Plouk's Fans</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCP4wIoy9W9WdAfVIN2sVmEw/videos'"><b>Skyrroz</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJDCxvdJgCgy_bEs4mKSBXg/videos'"><b>SkyrrozTV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCOFpy3UkxQR-5L2WohPENMQ/videos'"><b>Celeborn</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4peNo-31r7fhQZgu0_JRIA/videos'"><b>Sheshounet</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChZatj8KUygFki715Mgu9CQ/videos'"><b>Moustaki</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjkD-m8HTTk1AZJg7fUnJyA/videos'"><b>The Share Players</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCnE7O19M6-yzOWlTiSs0jQQ/videos'"><b>Bibi300</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC2FAM-zL-PhH0OkIT95aWJQ/videos'"><b>Ex Serv</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCDGmZYT5QfvfEXgzaEAYNpg/videos'"><b>Jeux Video Magazine</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCDsh4lseyfsUW9XnA-9J5iA/videos'"><b>Naito</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCBwXIoAvbDM9dhxjrLiEqwg/videos'"><b>Naito75 - Chaine Secondaire</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCwN_MU6-sDwOMArIlYIsKXA/videos'"><b>JeanBaptisteShow</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6kfBLceYQ5hPqzpcZhXGuA/videos'"><b>PinkGeek</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCP1pBlVld8IJzfa58Y5xg1A/videos'"><b>MrLEV12s LIFE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC33lqxChj2yKSoSjK6NWkZQ/videos'"><b>MrBboy45</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCo_Nm4TBp1rF0DRsWr377Ww/videos'"><b>Dr_Horse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCXBE_QQSZueB8082ml5fslg/videos'"><b>TimTheTatman</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCzLkeUSipfOtSC9of-Q0yiQ/videos'"><b>GOODWIN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCU8_onYYhNxwGUB3hA34C4Q/videos'"><b>FrenchHardware</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCi0sGhbsYQSQTyfKmyoeqYg/videos'"><b>PADAWAMHD</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCFqa4N0_WhVctqkqiHXm_QA/videos'"><b>Hardisk TV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjuPrMBQjWlYwQUSxhuB1eQ/videos'"><b>Gamekult</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC3yUthlHZTZvwRjRUjrZdVw/videos'"><b>Polo8 Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC7BNBNLwMF8GjgXLDP8PWQw/videos'"><b>Mike Codeur</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyY9drPO4YAbWAXLxJbzfvw/videos'"><b>PHYZIK</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCM6wiLufRyLcp5-MyGlLfIg/videos'"><b>Proze</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4KuA_o62ruo_2R1BYKUA-g/videos'"><b>TonyFPS</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCVynCj7L-ANcNLnh9QX4seQ/videos'"><b>Wisethug</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNymP44F_1VH78Krsd999Ww/videos'"><b>Bugland</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCbLElfSqnOVYOLKydgCs3NA/videos'"><b>IndieMag</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCoFxU7v0xVzmWFmhE_SDF8Q/videos'"><b>SNIR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjjKpNYRc2omsrA0EY2_Cpg/videos'"><b>GaGzZz</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdWi8Cc53rccKWZ3aS0KNnQ/videos'"><b>N-Gamz</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCOLBuf1DXEfdIccvGczNUzg/videos'"><b>LeStream Replay</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCzPq_GNoEb6qpsw0sM5HPqA/videos'"><b>ActuGaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPDQZW9bUmsXSTmUq4rYeVw/videos'"><b>JEUXACTU</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC3rRI50QRkhSpWbvlqF1zjw/videos'"><b>Monsieur Toc</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCvmbmTfDzHmC6T6H-5evP1g/videos'"><b>Asterion</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCcAseIHjpVblasilRbEtYAQ/videos'"><b>ROMU LES BONS TUYAUX</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCw7FkXsC00lH2v2yB5LQoYA/videos'"><b>jackfrags</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCTnsD9vW88jyu5SQR3coqMA/videos'"><b>Motion Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCVU_P6-Cy1d-Y113NG8XRew/videos'"><b>Gia Photo Tech Jeux video</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJy0lX8ThZ7lCtst7JnegWQ/videos'"><b>Jojol</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCffJNzGYq590aig58YUEILg/videos'"><b>Pépé Fortnite</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCnyXbcCPqBOf_qXjyNF7dlg/videos'"><b>Conkerax</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCxg9Fr64pj3EnUD07UN7qzg/videos'"><b>Romain - Unreal Engine</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Plouk</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCL-FjjXKobLHba0iwX1Hp4g/videos'"><b>Mathieu Tutos Unreal Engine</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCEnPuFDPRzZzeH2UFJ1Q4cA/videos'"><b>MATHIEU</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCr0Nu1XVcqXXxQ_dQZ3Uayg/videos'"><b>MathieuVOD</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4MsAe2ZQEcAKbxx03_Y4vg/videos'"><b>TheSimplySpace</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCdL3UpiseRlvxXuORJjmqZw/videos'"><b>Stardust - La Chaine Air &amp; Espace</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCCMxHHciWRBBouzk-PGzmtQ/videos'"><b>Bazar du Grenier</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_yP2DpIgs5Y1uWC0T03Chw/videos'"><b>Joueur Du Grenier</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCBebjCwRBWW15DogPrgXzig/videos'"><b>Lusty</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrCcpeVQlTCdoOId4yDUsZQ/videos'"><b>Psyhodelik</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC3Y28kCGrJxTKza1Z3mBOkA/videos'"><b>RYU Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCHsKuaAR1lvLLwchoLAuEkA/videos'"><b>Alex Express</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCM2e9ub5nKQIvYbIPxSTbOg/videos'"><b>Aurelien_Sama</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPP-NkzSqMJ9ywhJkcgrpAw/videos'"><b>Tech_Sama</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCtMVHI3AJD4Qk4hcbZnI9ZQ/videos'"><b>SomeOrdinaryGamers</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC5X4e8ScZI2AFd_vkjSoyoQ/videos'"><b>AstronoGeek</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkMsSGlEMPRxhqvGj6qeucQ/videos'"><b>12 Parsecs</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCj7Tqdo8ZrPMH-4yQw5dsig/videos'"><b>Gamers Addict</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCOIdzmO8FB-4Mkd7axLs55Q/videos'"><b>SebSSol LIVE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyZVLVECYlP5P28tOxD6KwQ/videos'"><b>CRITIX ORG</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrUjXTkEw9sJUHcip8duOzw/videos'"><b>E.M.B</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCU6lg5nAclYERASgGsNcxBA/videos'"><b>EMB TV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRXcryyD7dzNQzd0Zkbj3ug/videos'"><b>Julien Chieze</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC6yhX3lGeSSRlHycI3rfDqQ/videos'"><b>Carole Quintaine</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-7b--eRO5-hvcQiuDVdLXA/videos'"><b>Sabrina820 Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrOn2yuUzOvSZmwYlSZAxJQ/videos'"><b>SacKzi</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCCFqUJYKT97UerMmb6DM0bw/videos'"><b>GOTAGA</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCwDeagCMN0rTg5-r3s9AINA/videos'"><b>GotagaTV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCmLhwkpYX5aJfLJD0Ec3vZQ/videos'"><b>Mabzouel</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCLOAPb7ATQUs_nDs9ViLcMw/videos'"><b>Benjamin Code</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJEClyq6bcqHu5lfH4DlPqA/videos'"><b>Steelorse</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjxfoYq1vAEGU7KD_C3I48g/videos'"><b>Mamytwink</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCWnfDPdZw6A23UtuBpYBbAg/videos'"><b>Dr Nozman</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCEi0DIwuAQNe68OK_1hAN7w/videos'"><b>Antoine Daniel - Les VOD</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC-4M8AN08hw39nn2v91VuMQ/videos'"><b>CYRILmp4</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCWeg2Pkate69NFdBeuRFTAw/videos'"><b>SQUEEZIE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCLzhly43KD3s9fdh7Se5p_g/videos'"><b>Guillaume et Kim</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCyWqModMQlbIo8274Wh_ZsQ/videos'"><b>Cyprien</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCww2zZWg4Cf5xcRKG-ThmXQ/videos'"><b>NORMAN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCzjd9v6DMprAAvOBB4sxBPA/videos'"><b>LE GRAND JD</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCQfrSok6xuClEq8bOwiEWfA/videos'"><b>Doc Geraud</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCVf2py0nEmhiUH7pryhZdyg/videos'"><b>Developpeuse Du Dimanche</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCo0U1tbk3YbqiLDhkeWOviQ/videos'"><b>Bob Lennon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCHsJSytN-f48kGo9CQ4dPog/videos'"><b>ApeX Punkill</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjvsS_pdoMNIK73E4iJfsmw/videos'"><b>AymenZeR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSJxne19pJyW7l7HjHM-LRg/videos'"><b>ZACK</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC9wzC5mFFcIdguoyveTo6Ng/videos'"><b>ici Amy Plant</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCLXDNUOO3EQ80VmD9nQBHPg/videos'"><b>Fouloscopie</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Warn</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCr613nJgA50o8DUUT00qHvw/videos'"><b>WULFF DEN</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCJdkEDAt04ZWW6eAHHWKgdw/videos'"><b>Kio ÐÎÊKÎÑ</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChDMxluqxAVvppxkQYabIjw/videos'"><b>Florian Grill</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCXlS0aGVxG8V0cePkVoIxMQ/videos'"><b>InputMapper</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCgllfv3wr1JpBg8gd832HsQ/videos'"><b>Jack Schofield</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCIUwxezrKWGDSHugVkuhpYA/videos'"><b>BoomBakalous</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCjED9uS41ioeFuPfbR-OBlw/videos'"><b>Les Freres Poulain</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCBcATKRld-58W6Db5aBeAgQ/videos'"><b>GetDunked</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCCjjFNdcaI4P5NAmwrdX_-g/videos'"><b>Fabrice CARUSO</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCVCp37PnlkiS191Ejy1CMVg/videos'"><b>Aly</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UCP5N5bdi7m_jUCQZZzsVITA/videos'"><b>3dNikita</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/channel/UC16LswWXnxMjqxAcPIMU3WQ/videos'"><b>ilge ipek</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC1hw0xyTzJIldlda0AF-GVA/videos'"><b>Darkcola Dkc</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkI88F8sLwryARjj2S5zG8Q/videos'"><b>Nicoreda</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCxLv5PTKJ1w4cu508acU3ow/videos'"><b>Wiimote EveryWhere</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChNb9oOsI4ENJvHhCZAKFFg/videos'"><b>Gyro Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCLdtE2ay0uCt4v4Z38ZOoQA/videos'"><b>directedinput</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPv1jAEk34GloQkgQaGRzVw/videos'"><b>Jay Zeda ⋈ Gaming</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrJDqScdjuNocso1SXMllaA/videos'"><b>OneSwitch</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChHxJaKDqH4bOs0pX3hkKnA/videos'"><b>Basically Homeless</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRhyS_ylPQ5GWBl1lK92ftA/videos'"><b>Léo - TechMaker</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCkZv3um0yICjd0eSvuvhI9w/videos'"><b>BadBoysRP</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCjkQ3fGxfmTTktIjRoNIn2Q/videos'"><b>Animu Templar</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCtdhIKpzDV2LqPrRD4t6Hww/videos'"><b>ARKADE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNLJd7YD8ysETf5zAfJObjA/videos'"><b>Tech Yesterday</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCSa3tAS6S9fZhPZue05eyhQ/videos'"><b>Retrojeux</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCPFChjpOgkUqckj3378jt5w/videos'"><b>Heliox</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCXuqSBlHAE6Xw-yeJA0Tunw/videos'"><b>Linus Tech Tips</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC4CsqctrGOn4NTz09sAhXwQ/videos'"><b>Macho Nacho Productions</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChY9Cgv-iyPDvf1Bkyx20OQ/videos'"><b>My Mate VINCE</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Meta</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCuvYgmtahB6tSxXeulVZbsA/videos'"><b>Rames VR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCVEw7o4VIuX3ZvWoQx_n3Fg/videos'"><b>Driver4VR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNIDHtBQ0LX0X9z2jKgAZcw/videos'"><b>VR4Player.fr</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC7VIUA4-4WIehSlfGL2LszQ/videos'"><b>DAILY-VR &amp; ETR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCNWZ8Ztc8UM7TyOGMa6G55A/videos'"><b>VR Singe &amp; Thorix</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCRzDVQkkuZn5ogJ7WjpOExQ/videos'"><b>Kentypoo</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCUHnfIhw5ZNjK4dJjYNHPUQ/videos'"><b>Asphaar VR</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Boob</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCa3fFLwNNXOOEYSV15Frlvg/videos'"><b>BIKINISTOKYO</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UChXKjLEzAB1K7EZQey7Fm1Q/videos'"><b>Pokimane</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCKQt9M1KLrIuPNQGGKutWXw/videos'"><b>Julia Bayonetta</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCfaR0fjhUaMHjPhpP_m3Ctw/videos'"><b>GloriaMatvien</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UClIIy-aQBXRi1OHupBcrjJw/videos'"><b>Miss Monique</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCI7ktPB6toqucpkkCiolwLg/videos'"><b>Pan Piano</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UC_-SOmwHkEBeTsV9sWJoOZA/videos'"><b>Deujna</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCrFm36kXMaHfY2HCZqmEhGw/videos'"><b>Svetlana Sh1ne</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/channel/UCd6C3mPA_ETLWc6-LDVo8fg/videos'"><b>India Dior</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Video</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=dOiFYGQWj0s'"><b>Don't THROW AWAY your mouse and keyboard yet! - Arkade Blaster</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/watch?v=41zAM-to8w8'"><b>Notre plus BEAU PROJET est FINI !!! DIY PINCAB TER-MI-NÉ !!</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=gF91QDUHBrI'"><b>De PONG A la DUALSENSE : Histoire des MANETTES</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=GOI9EkLsUm0'"><b>Declaration of War</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=s_VmBR_h90M'"><b>Equations of State part 8: Peng-Robinson binary interaction parameters</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=I2TTD0l2QbE'"><b>J’AI TESTÉ UNE PRATIQUE DANGEREUSE… Mais surpuissante😈 (Le stoïcisme)</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=ysLc3rSB8o0'"><b>YA ESTAN USANDO LA ALTERNATIVA LEGAL DE LOS CHETOS</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=4Vt0t4DVIuk'"><b>Cheaters in Warzone...Will Ricochet Anti-Cheat Work?</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=uin4n_yf1VU'"><b>Motion controller for fps games</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Playlist</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=xc2YEysPTKE&amp;list=PL5ZNTBvNQDNpbvzniVDKb0QaSE-kVinAD&amp;index=1'"><b>Phoenix (Full Album)</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=hLBeCx97tLI&amp;list=OLAK5uy_kqq2OKCoOZz4DgjO1g0uVuynk25H5ZgBU'"><b>Seven</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=r2Uw2xaRsho&amp;list=OLAK5uy_ng9YYcp7wdGf3dKXOXDiuzHBPyCe0gL24'"><b>Explicit Treatment</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=KDf3P5ZT4_I&amp;list=PLeXGsHOvKExdwhn658gARb3bI8XKVoFZB'"><b>Top titres – Killstation</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=X1KTNd3ypvQ&amp;list=PLEYhDxO-7YbI102unmR2sJpbWxF1kyHoM'"><b>Coming Home</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/watch?v=Psb8e_NlV08&amp;list=PLfwl8JvUH1X0DL4nldrWdC870Z9ApZLhr'"><b>Best忍</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Search</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=joycon+forza&amp;sp=EgIIBA%253D%253D'"><b>joycon forza</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/results?search_query=switch+controller+pc&amp;sp=EgQIBBAB'"><b>switch controller pc</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/results?search_query=mando+wii+pc&amp;sp=EgIIBA%253D%253D'"><b>mando wii pc</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/results?search_query=glovepie&amp;sp=EgIIBA%253D%253D'"><b>glovepie</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/results?search_query=touchmote&amp;sp=EgIIBA%253D%253D'"><b>touchmote</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.youtube.com/results?search_query=wiinusoft&amp;sp=EgQIBRAB'"><b>wiinusoft</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=wiimote&amp;sp=EgIIAg%253D%253D'"><b>Wiimote</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=Wii+remote&amp;sp=EgIIAg%253D%253D'"><b>Wii remote</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=Wii+controller&amp;sp=EgIIAg%253D%253D'"><b>Wii controller</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=Joycons+PC&amp;sp=EgIIAg%253D%253D'"><b>Joycons PC</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=Joycon&amp;sp=EgIIAg%253D%253D'"><b>Joycon</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=Joycon+wheel&amp;sp=EgIIAg%253D%253D'"><b>Joycon wheel</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=equation+of+state+&amp;sp=EgQIBRAB'"><b>equation of state</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.youtube.com/results?search_query=PC+Optimization&amp;sp=EgIIBA%253D%253D'"><b>PC Optimization</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+        <div>
+            <p></p><h1>Twitch</h1><p></p>
+            <p>
+            </p><div>
+                <div onclick="add(this)" class="switchediting" style="display: none;">+</div>
+                <div><button onclick="window.location.href='https://www.twitch.tv/wiimot3'"><b>Wiimot3</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+                <div><button onclick="window.location.href='https://www.twitch.tv/nicoredatv'"><b>NicoredaTV</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div><div><button onclick="window.location.href='https://www.twitch.tv/wiibanshee'"><b>WiiBanshee</b></button><div onclick="substract(this)" class="switchediting" style="display: none;">-</div></div>
+            </div>
+            <p></p>
+            <div onclick="substractTitle(this)" class="switchediting" style="display: none;">-</div>
+        </div><br>
+    </div>
+    <script>
+        var elementtoadd = '';
+        var channelname = '';
+        var link = '';
+        function getPromptChannelName(val) {
+            channelname = val;
+            if (channelname == null | channelname == "") {
+                return;
+            }
+            setTimeout(promptFunc, 1000);
+        }
+        function promptFunc() {
+            Prompt.render('Please enter a link:', 'getPromptLink');
+        }
+        function getPromptLink(val) {
+            link = val;
+            if (link == null | link == "") {
+                return;
+            }
+            setTimeout(addFinalFunc, 1000);
+        }
+        function addFinalFunc() {
+            addFinal();
+        }
+        function addFinal() {
+            var element = elementtoadd;
+            searches.push(channelname);
+            var domstring = `<div><button onclick="window.location.href='` + link + `'"><b>` + channelname + `</b></button><div onclick="substract(this)" class="switchediting">-</div></div>`;
+            element.parentNode.innerHTML += domstring;
+            var elems = document.querySelectorAll('.switchediting');
+            for (var i = 0; i < elems.length; i += 1) {
+                elems[i].style.display = 'inline-block';
+            }
+        }
+        function add(element) {
+            elementtoadd = element;
+            Prompt.render('Please enter a channel name:', 'getPromptChannelName');
+        }
+        function substract(element) {
+            var channelname = element.parentNode.firstChild.firstChild.innerHTML;
+            const index = searches.indexOf(channelname);
+            if (index > -1) {
+                searches.splice(index, 1);
+            }
+            element.parentNode.remove();
+        }
+        function addTitle(element) {
+            var titlename = prompt("Please enter a title name:", "");
+            if (titlename == null | titlename == "") {
+                return;
+            }
+            var domstring = `<div>
+                                <p></p><h1>` + titlename + `</h1><p></p>
+                                    <p>
+                                    <div><div onclick="add(this)" class="switchediting">+</div></div>
+                                    </p>
+                                <div onclick="substractTitle(this)" class="switchediting">-</div>
+                            </div><br>`;
+            element.parentNode.innerHTML += domstring;
+            var elems = document.querySelectorAll('.switchediting');
+            for (var i = 0; i < elems.length; i += 1) {
+                elems[i].style.display = 'inline-block';
+            }
+        }
+        function substractTitle(element) {
+            element.parentNode.nextSibling.remove();
+            element.parentNode.remove();
+        }
+        var editbool = false;
+        function edit() {
+            var elems = document.querySelectorAll('.switchediting');
+            if (editbool) {
+                for (var i = 0; i < elems.length; i += 1) {
+                    elems[i].style.display = 'none';
+                }
+                editbool = false;
+            }
+            else {
+                for (var i = 0; i < elems.length; i += 1) {
+                    elems[i].style.display = 'inline-block';
+                }
+                editbool = true;
+            }
+        }
+    </script>
+    <script>
+        var elem = document.getElementById('search');
+        var el = document.getElementById("page");
+        var originalHtml = el.innerHTML;
+        var stringsearches;
+        function search() {
+            var searchword = elem.value;
+            if (searchword != '') {
+                var newHtml = originalHtml.replace(new RegExp('<b>' + searchword + '</b>', "g"), '<b>' + searchword.fontcolor("orange") + '</b>');
+                el.innerHTML = newHtml;
+            }
+            else {
+                setTimeout(function () {
+                    document.querySelector('#wait').style.display = 'block';
+                }, 0);
+                setTimeout(function () {
+                    deleteSearchWords();
+                }, 100);
+            }
+        }
+        function save() {
+            setTimeout(function () {
+                document.querySelector('#wait').style.display = 'block';
+            }, 0);
+            setTimeout(function () {
+		deleteSearchWords();
+                var markup = document.documentElement.innerHTML;
+                saveDocument('webViewer', markup, stringsearches);
+            }, 100);
+        }
+        function deleteSearchWords() {
+            stringsearches = '[';
+            searches.forEach(function (search) {
+                if (search != "") {
+                    stringsearches += '"' + search + '", ';
+                    originalHtml = el.innerHTML;
+                    var newHtml = originalHtml.replace(new RegExp('<b>' + search.fontcolor("orange") + '</b>', "g"), '<b>' + search + '</b>');
+                    el.innerHTML = newHtml;
+                }
+            });
+            document.querySelector('#wait').style.display = 'none';
+        }
+    </script>
+    <script>
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function (e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        /*An array containing all the country names in the world:*/
+        var searches = ["Art of Minimal Techno Trip", "Cafe De Anatolia", "Code", "Dennis Lloyd", "GroundBass TV", "Aim To Head Release", "Aim To Head Mix", "Aim To Head Official", "SoundScape Records", "omer gigi", "Vado", "Dave East", "HOMmega", "Magic Music Mix", "Magic Music", "Extended Music", "MELODY Records", "NewAgeWave", "Rapha Stamatopoulos", "Versus Music Official", "Invisible Reality", "Deep Departure", "Vertex Records", "Static Movement", "Cercle", "Galacy", "Liquicity", "Savvas Kalt", "Kalki", "Psychedelic Island", "Serotonin Sound", "Speedsound", "Goa dark", "Trance Nation", "Vasho", "ADDICTED", "MORPHINE", "Matchy", "Oliver Huntemann", "Alessandro Martire", "Innellea", "Life and Death Forever", "Labo T.", "Soul Button", "D-Nox", "Flume", "Paul Kalkbrenner", "Rammor", "This Never Happened", "Charlotte de Witte", "Cafe De Anatolia ETHNO WORLD", "Tchami", "Oliver Heldens", "Ohm Mind", "Tekla DuDuchava", "Solomun (Official)", "UNITY", "Amelie Lens", "Eric Prydz", "Blanco White", "Taylor Davis", "Trey J. Anderson", "ksherwoodops", "Felix Krocher", "Tycho", "MORTEN", "Karma Fields", "Diplo", "Mike Candys", "Zyce", "Azax", "Mimra Official", "Nora En Pure", "Antdot", "KOROLOVA", "Hozho", "Droplex Official", "Afterlife", "RUFUS DU SOL", "Daniel Deluxe", "Cosmic Gate", "Electro Junkiee", "RYDHM DEE", "Nano Ohm", "Sub6TV", "Lifeforms", "Outsiders Official", "Juno Reactor", "Atomic Pulse", "Freedom Fighters", "Alpha Portal", "MAJOR7 X-NOIZE", "Mose", "Adana Twins", "DJ NightStar", "E-Mantra Official", "Protonica", "Electric Samurai", "Ovnimoon", "Avalon", "Ace Ventura", "Vini Vici", "Ticon", "BLiSS", "Perfect Stranger", "Out of Orbit", "Animato Official", "RITMO", "Astrix Official", "Yotto", "Worakls", "Vertical Mode", "Thylacine Official", "STEPHAN BODZIN", "Immortal Technique", "Giorgia Angiuli", "Enrico Sangiuliano", "Fernanda Pistelli", "Psychedelic Universe", "Space Noise", "DJ Titio", "Epidemic Electronic", "ChilloutDeer", "Robert Miles", "The Prodigy", "KREAM", "MrLemilica", "MrLemilica 2", "Maximum Sound", "Sound Territory", "Above & Beyond", "Fluidified", "MADIS", "DJanes Net", "NME", "SpaceAmbient", "Ambient", "The Psychedelic Muse", "Boris Brejcha", "Boris Brejcha Club", "LORN", "Black Sabbath", "ROAR! ROCK OF ANGELS RECORDS", "Enemy Inside", "DEVILSKIN", "killstation", "Drowning Pool", "Despotz Records", "Nothing", "Chaoseum", "Gojira", "Monsieur Ruchenstein", "Evanescence", "City Morgue", "Cryo Chamber", "Muse", "Black Me Out", "Shogun Audio", "System Of A Down", "serjtankian", "The Doors", "kornchannel", "GHOSTEMANE", "Halestorm", "Nightwish", "Pain", "Disturbed", "Five Finger Death Punch", "Rage Against the Machine", "Nirvana", "Slipknot", "Spiritbox Official", "Lil Peep", "Lil Darkie", "scarlxrd", "EminemMusic", "officialdevlin", "Ghetts", "Pimp My Bass", "Ski Mask The Slump God", "Five Finger Posse", "TRILLPHONK", "MVKO", "scroll忍", "UNAVERAGE GANG", "REVERIE LOVE", "Tove Lo", "The Blaze", "London Grammar", "Monolink", "NTO", "Ed Sheeran", "Skylar Grey", "NoCopyrightSounds", "Cats On Trees", "OneRepublic", "Jérémy Frerot", "TUTO UNITY FR", "Unity", "SpeedTutor", "Planete RAW", "Hugo Lisoir", "TheSimplySpace", "Un regard sur l'Espace", "ScienceEtonnante", "Le Journal de l'Espace", "Anis Rhali", "Code Name: Reaction", "V101 Science", "Le Petit Astronome", "ARTE", "VISION", "Looking 4", "Destiny", "Jetson", "TV5MONDE Info", "ANONIMAL", "Corneil & Bernie | Officiel", "Les Dalton", "Mathias", "gameranx", "At0miumVOD", "At0mium", "Force Gaming", "STAF_52", "Seldell", "Le Bon, la Brute et le Geek", "Best Indie Games", "Suliven GAMING", "Actu Jeux - IamYunie", "Micode", "Micodeux", "Underscore_", "Plouk's Fans", "Skyrroz", "SkyrrozTV", "Celeborn", "Sheshounet", "Moustaki", "The Share Players", "CRITIX ORG", "E.M.B", "EMB TV", "Bibi300", "Ex Serv", "Jeux Video Magazine", "Naito", "Naito75 - Chaine Secondaire", "JeanBaptisteShow", "PinkGeek", "MrLEV12s LIFE", "MrBboy45", "Dr_Horse", "TimTheTatman", "GOODWIN", "FrenchHardware", "PADAWAMHD", "Hardisk TV", "Gamekult", "Polo8 Gaming", "Mike Codeur", "PHYZIK", "Proze", "TonyFPS", "Wisethug", "Bugland", "IndieMag", "SNIR", "GaGzZz", "N-Gamz", "LeStream Replay", "ActuGaming", "JEUXACTU", "Monsieur Toc", "Asterion", "ROMU LES BONS TUYAUX", "jackfrags", "Motion Gaming", "Gia Photo Tech Jeux video", "Jojol", "Pépé Fortnite", "Conkerax", "Mathieu Tutos Unreal Engine", "MATHIEU", "MathieuVOD", "Romain - Unreal Engine", "TheSimplySpace", "Stardust - La Chaine Air & Espace", "Bazar du Grenier", "Joueur Du Grenier", "Lusty", "Psyhodelik", "RYU Gaming", "Alex Express", "Aurelien_Sama", "Tech_Sama", "SomeOrdinaryGamers", "AstronoGeek", "12 Parsecs", "Gamers Addict", "SebSSol LIVE", "Julien Chieze", "Carole Quintaine", "Sabrina820 Gaming", "SacKzi", "GOTAGA", "GotagaTV", "Mabzouel", "Benjamin Code", "Steelorse", "Mamytwink", "Dr Nozman", "Antoine Daniel - Les VOD", "CYRILmp4", "SQUEEZIE", "Guillaume & Kim", "Cyprien", "NORMAN", "LE GRAND JD", "Doc Geraud", "Developpeuse Du Dimanche", "Bob Lennon", "ApeX Punkill", "AymenZeR", "ZACK", "Darkcola Dkc", "Nicoreda", "Wiimote EveryWhere", "Gyro Gaming", "directedinput", "Jay Zeda ⋈ Gaming", "OneSwitch", "Basically Homeless", "Léo - TechMaker", "BadBoysRP", "Animu Templar", "ARKADE", "Tech Yesterday", "Retrojeux", "Heliox", "Linus Tech Tips", "Macho Nacho Productions", "Driver4VR", "VR4Player.fr", "DAILY-VR & ETR", "VR Singe & Thorix", "Kentypoo", "Asphaar VR", "BIKINISTOKYO", "Pokimane", "Julia Bayonetta", "GloriaMatvien", "Miss Monique", "Pan Piano", "Deujna", "Svetlana Sh1ne", "Three Days Grace", "Bring Me The Horizon", "Breaking Benjamin", "ManBetterKnow", "FIGHT THE FURY", "Thousand Foot Krutch", "Sixthells", "$uicideboy$", "India Dior", "My Mate VINCE", "Prompto", "staticx", "Nine Lashes", "Skillet", "Icon For Hire", "SOiLVEVO", "Katagena Channel", "ActuGaming", "Hardigun", "Draconian", "Napalm Records", "Jinjer Metal Band", "Lamb of God", "Ra Official", "ＴＲＡＳＨ 新 ドラゴン", "ici Amy Plant", "Fouloscopie", "Godsmack", "LifesBiggestQuestions", "CheVelle", "Like A Storm", "Nonpoint", "THIRTY SECONDS TO MARS", "Kingdom Collapse", "Silent Theory", "Villain of the Story", "Kristina Rybalchenko", "Motionless In White", "Volcano On Mars", "LOUDEN", "Alice In Chains", "Pink Floyd", "HDPinkFloyd", "Jethro Tull", "Omega Racing", "Spaceuntravel", "Rag'n'Bone Man", "Gautoz", "Gossip Gloss", "Mr. Sam", "Jordan Adetunji", "RT France", "Phantogram", "Radiohead", "PlayaPhonk", "ARTBAT", "WULFF DEN", "DeepMe", "Kio ÐÎÊKÎÑ", "Florian Grill", "InputMapper", "Don't THROW AWAY your mouse and keyboard yet! - Arkade Blaster", "sina-drums", "LaBajon", "Lilly Palmer", "Jack Schofield", "BoomBakalous", "Rames VR", "Ganginou !", "Yannick", "Starlight Français", "aTech", "PolyMars", "Les Freres Poulain", "Notre plus BEAU PROJET est FINI !!! DIY PINCAB TER-MI-NÉ !!", "ImagineDragons", "JeanBaptistePlay", "SEB", "Seether", "Burls Art", "Rosie Carney", "Snøw", "Snowgoons", "julie artis", "dashup!", "GetDunked", "Fabrice CARUSO", "Aly", "David Larose", "Wiimot3", "NicoredaTV", "WiiBanshee", "Pandorya", "HugoDécrypte", "joycon forza", "switch controller pc", "mando wii pc", "glovepie", "touchmote", "wiinusoft", "3dNikita", "ilge ipek", "Pog", "GUILLAUME", " JoyShockMapper", "BetterJoy", "DS4Windows", "Touchmote", "WiimoteGun", "Thug4Life", "A-YEON", ""];
+
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("search"), searches);
+
+    </script>
+
+    <script>
+        function CustomAlert() {
+            this.render = function (dialog) {
+                var winW = window.innerWidth;
+                var winH = window.innerHeight;
+                var dialogoverlay = document.getElementById('dialogoverlay');
+                var dialogbox = document.getElementById('dialogbox');
+                dialogoverlay.style.display = "block";
+                dialogoverlay.style.height = winH + "px";
+                dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+                dialogbox.style.top = "100px";
+                dialogbox.style.display = "block";
+                document.getElementById('dialogboxhead').innerHTML = "Acknowledge This Message";
+                document.getElementById('dialogboxbody').innerHTML = dialog;
+                document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">OK</button>';
+            }
+            this.ok = function () {
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+        }
+        var Alert = new CustomAlert();
+        function CustomConfirm() {
+            this.render = function (dialog, op, id) {
+                var winW = window.innerWidth;
+                var winH = window.innerHeight;
+                var dialogoverlay = document.getElementById('dialogoverlay');
+                var dialogbox = document.getElementById('dialogbox');
+                dialogoverlay.style.display = "block";
+                dialogoverlay.style.height = winH + "px";
+                dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+                dialogbox.style.top = "100px";
+                dialogbox.style.display = "block";
+
+                document.getElementById('dialogboxhead').innerHTML = "Confirm that action";
+                document.getElementById('dialogboxbody').innerHTML = dialog;
+                document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Confirm.yes(\'' + op + '\',\'' + id + '\')">Yes</button> <button onclick="Confirm.no()">No</button>';
+            }
+            this.no = function () {
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+            this.yes = function (op, id) {
+                if (op == "delete_post") {
+                    deletePost(id);
+                }
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+        }
+        var Confirm = new CustomConfirm();
+        function CustomPrompt() {
+            this.render = function (dialog, func) {
+                var winW = window.innerWidth;
+                var winH = window.innerHeight;
+                var dialogoverlay = document.getElementById('dialogoverlay');
+                var dialogbox = document.getElementById('dialogbox');
+                dialogoverlay.style.display = "block";
+                dialogoverlay.style.height = winH + "px";
+                dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+                dialogbox.style.top = "100px";
+                dialogbox.style.display = "block";
+                document.getElementById('dialogboxhead').innerHTML = "A value is required";
+                document.getElementById('dialogboxbody').innerHTML = dialog;
+                document.getElementById('dialogboxbody').innerHTML += '<br><input id="prompt_value1">';
+                document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Prompt.ok(\'' + func + '\')">OK</button> <button onclick="Prompt.cancel()">Cancel</button>';
+            }
+            this.cancel = function () {
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+            this.ok = function (func) {
+                var prompt_value1 = document.getElementById('prompt_value1').value;
+                window[func](prompt_value1);
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+        }
+        var Prompt = new CustomPrompt();
+    </script>
+</body>
